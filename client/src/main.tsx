@@ -10,21 +10,24 @@ import { TanStackDevtools } from '@tanstack/react-devtools';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import { RouterProvider } from 'react-router';
 import { router } from './app/router/Router.tsx';
+import { store, StoreContext } from './lib/stores/store.ts';
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router}/>
-      <TanStackDevtools
-        plugins={[
-          {
-            name: 'TanStack Query',
-            render: <ReactQueryDevtoolsPanel />,
-          },
-        ]}
-      />
-    </QueryClientProvider>
+    <StoreContext.Provider value={store}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <TanStackDevtools
+          plugins={[
+            {
+              name: 'TanStack Query',
+              render: <ReactQueryDevtoolsPanel />,
+            },
+          ]}
+        />
+      </QueryClientProvider>
+    </StoreContext.Provider>
   </StrictMode>,
 );
