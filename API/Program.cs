@@ -1,5 +1,8 @@
+using API.Middleware;
 using Application.Activities.Queries;
+using Application.Activities.Validators;
 using Application.Core;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -17,15 +20,19 @@ builder.Services.AddMediatR(cfg =>
 {
     cfg.LicenseKey = builder.Configuration["MediatrLicenseKey"];
     cfg.RegisterServicesFromAssemblyContaining<GetActivityList>();
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 builder.Services.AddAutoMapper(cfg => {
     cfg.LicenseKey = builder.Configuration["MediatrLicenseKey"];
     cfg.AddMaps([typeof(MappingProfiles)]);
 });
+builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
   .WithOrigins("https://localhost:3000","http://localhost:3000"));
 app.MapControllers();
