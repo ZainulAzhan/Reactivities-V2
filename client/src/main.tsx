@@ -13,23 +13,29 @@ import { RouterProvider } from 'react-router';
 import { router } from './app/router/Router.tsx';
 import { store, StoreContext } from './lib/stores/store.ts';
 import { ToastContainer } from 'react-toastify';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { ms } from 'date-fns/locale';
+
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <StoreContext.Provider value={store}>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <TanStackDevtools
-          plugins={[
-            {
-              name: 'TanStack Query',
-              render: <ReactQueryDevtoolsPanel />,
-            },
-          ]}
-        />
-        <ToastContainer position='bottom-right'hideProgressBar theme='colored'/>
-      </QueryClientProvider>
-    </StoreContext.Provider>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ms}>
+      <StoreContext.Provider value={store}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <TanStackDevtools
+            plugins={[
+              {
+                name: 'TanStack Query',
+                render: <ReactQueryDevtoolsPanel />,
+              },
+            ]}
+          />
+          <ToastContainer position='bottom-right'hideProgressBar theme='colored'/>
+        </QueryClientProvider>
+      </StoreContext.Provider>
+    </LocalizationProvider>
   </StrictMode>,
 );
