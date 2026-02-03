@@ -19,6 +19,7 @@ builder.Services.AddControllers(opt =>
   var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
   opt.Filters.Add(new AuthorizeFilter(policy));
 });
+
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
   opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -36,6 +37,7 @@ builder.Services.AddAutoMapper(cfg => {
 });
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
+
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {
   opt.User.RequireUniqueEmail = true;
