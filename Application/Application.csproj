@@ -30,7 +30,6 @@
     <Folder Include="Core/" />
     <Folder Include="Interfaces/" />
     <Folder Include="Profiles/DTOs/" />
-    <Folder Include="Profiles/Queries/" />
   </ItemGroup>
 
 </Project>
